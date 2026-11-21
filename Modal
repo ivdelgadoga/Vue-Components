@@ -1,0 +1,227 @@
+<script>
+// Estados del modal
+// Modal
+const modalAbierto = ref(false);
+const empleadoSeleccionado = ref(null);
+
+// Abrir
+const abrirModal = (empleado) => {
+  empleadoSeleccionado.value = empleado;
+  nuevoEstatus.value = empleado.estatus;
+  modalAbierto.value = true;
+};
+
+// Cerrar
+const cerrarModal = () => {
+  modalAbierto.value = false;
+};
+</script>
+
+<template>
+<!-- Modal -->
+  <div
+    v-if="modalAbierto"
+    @click="cerrarModal()"
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+  >
+    <div
+      @click.stop
+      class="bg-white rounded-lg shadow-lg max-w-2xl w-full p-4 relative max-h-[95vh] overflow-y-auto"
+    >
+      <!-- Cerrar modal -->
+      <button
+        @click="cerrarModal()"
+        class="transition-color absolute ltr:right-5 rtl:left-5 top-5 z-999 flex h-11 w-11 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:bg-gray-700 dark:bg-white/[0.05] dark:text-gray-400 dark:hover:bg-white/[0.07] dark:hover:text-gray-300 cursor-pointer"
+      >
+        <svg
+          class="fill-current"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M6.04289 16.5418C5.65237 16.9323 5.65237 17.5655 6.04289 17.956C6.43342 18.3465 7.06658 18.3465 7.45711 17.956L11.9987 13.4144L16.5408 17.9565C16.9313 18.347 17.5645 18.347 17.955 17.9565C18.3455 17.566 18.3455 16.9328 17.955 16.5423L13.4129 12.0002L17.955 7.45808C18.3455 7.06756 18.3455 6.43439 17.955 6.04387C17.5645 5.65335 16.9313 5.65335 16.5408 6.04387L11.9987 10.586L7.45711 6.04439C7.06658 5.65386 6.43342 5.65386 6.04289 6.04439C5.65237 6.43491 5.65237 7.06808 6.04289 7.4586L10.5845 12.0002L6.04289 16.5418Z"
+            fill=""
+          />
+        </svg>
+      </button>
+
+      <!-- <h2 class="text-xl font-bold mb-4">Datos del usuario</h2> -->
+
+      <div class="px-2 ltr:pr-14 rtl:pl-14">
+        <h4
+          class="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90"
+        >
+          Información del usuario
+        </h4>
+
+        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
+          Actualiza los datos para mantener el perfil al día.
+        </p>
+      </div>
+
+      <div class="flex space-x-4 overflow-hidden mt-0">
+        <div class="flex animate-[slide_2s_linear_infinite]">
+          <hr class="border-emerald-500 border-2 w-10" />
+          <hr class="border-emerald-500 border-2 w-25 ml-4" />
+        </div>
+      </div>
+
+      <div>
+        <div
+          class="p-5 mb-6 border-gray-200 rounded-2xl dark:border-gray-800 lg:p6"
+        >
+          <div
+            class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between"
+          >
+            <div>
+              <div
+                class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32"
+              >
+                <!-- Nombre completo -->
+                <div>
+                  <p
+                    class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400"
+                  >
+                    Nombre completo
+                  </p>
+                  <p
+                    class="text-sm font-medium text-gray-800 dark:text-white/90"
+                  >
+                    {{ nombreCompleto(empleadoSeleccionado) }}
+                  </p>
+                </div>
+
+                <!-- Usuario -->
+                <div>
+                  <p
+                    class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400"
+                  >
+                    Usuario
+                  </p>
+                  <p
+                    class="text-sm font-medium text-gray-800 dark:text-white/90 flex gap-2"
+                  >
+                    {{ empleadoSeleccionado.idred }}
+                    <!-- Copy -->
+                    <svg
+                      @click="copiarAlPortapapeles(empleadoSeleccionado.idred)"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-4 cursor-pointer hover:text-emerald-500"
+                      title="Copiar usuario"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75"
+                      />
+                    </svg>
+                  </p>
+                </div>
+
+                <!-- No. empleado -->
+                <div>
+                  <p
+                    class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400"
+                  >
+                    No. empleado
+                  </p>
+                  <p
+                    class="text-sm font-medium text-gray-800 dark:text-white/90"
+                  >
+                    {{ empleadoSeleccionado.numempleado }}
+                  </p>
+                </div>
+
+                <!-- Área -->
+                <div>
+                  <p
+                    class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400"
+                  >
+                    Área
+                  </p>
+                  <p
+                    class="text-sm font-medium text-gray-800 dark:text-white/90"
+                  >
+                    {{ empleadoSeleccionado.area }}
+                  </p>
+                </div>
+
+                <!-- Puesto -->
+                <div>
+                  <p
+                    class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400"
+                  >
+                    Puesto
+                  </p>
+                  <p
+                    class="text-sm font-medium text-gray-800 dark:text-white/90"
+                  >
+                    {{ empleadoSeleccionado.puesto }}
+                  </p>
+                </div>
+
+                <!-- Estatus -->
+                <div>
+                  <p
+                    class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400"
+                  >
+                    Estatus
+                  </p>
+                  <!--
+                  <p
+                    class="text-sm font-medium text-gray-800 dark:text-white/90"
+                  >
+                    {{ empleadoSeleccionado.estatus }}
+                  </p>
+                  -->
+
+                  <select
+                    id="estatus"
+                    v-model="nuevoEstatus"
+                    class="border rounded px-2 py-1"
+                  >
+                    <option value="Activo">Activo</option>
+                    <option value="Baja">Baja</option>
+                    <option value="Incapacidad">Incapacidad</option>
+                    <option value="Vacaciones">Vacaciones</option>
+                  </select>
+                </div>
+
+                <div
+                  class="flex items-center gap-3 px-2 mt-6 lg:justify-between"
+                >
+                  <button
+                    @click="cerrarModal()"
+                    type="button"
+                    class="flex w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
+                  >
+                    Cerrar
+                  </button>
+
+                  <!-- class="flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto" -->
+                  <button
+                    @click="actualizarEstatus"
+                    type="button"
+                    class="flex w-full rounded-lg border border-gray-300 bg-emerald-300 px-4 py-2.5 text-sm font-medium text-white hover:bg-emerald-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] md:w-auto"
+                  >
+                    Guardar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Fin Modal -->
+</template>
